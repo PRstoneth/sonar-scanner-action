@@ -1,0 +1,22 @@
+name: 'GitHub Action for PHPUnit'
+description: 'Wraps the PHPUnit CLI to enable common PHPUnit commands.'
+author: 'Owen Voke <@pxgamer>'
+inputs:
+    sonar-url:
+        description: 'URL of the sonarqube host'
+        required: true
+    command:
+        description: 'User defined command'
+        required: false
+branding:
+    color: 'green'
+    icon: 'check-circle'
+runs:
+    using: 'docker'
+    image: 'Dockerfile'
+    env:
+      SONAR_HOST_URL: ${{ sonar-url }}
+    args:
+    - ${{ inputs.command }}
+
+# --user="$(id -u):$(id -g)" -it -v "$PWD:/usr/src" 
