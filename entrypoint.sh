@@ -20,9 +20,15 @@ if [ "${SONAR_PROJECT_BASE_DIR:-}" ]; then
   PROJECT_BASE_DIR="${SONAR_PROJECT_BASE_DIR}"
 fi
 
+if ! test -e "$PROJECT_BASE_DIR/.scannerwork"
+then
+  mkdir "$PROJECT_BASE_DIR/.scannerwork"
+fi
 if ! test -e "$PROJECT_BASE_DIR/.sonar"
 then
   mkdir "$PROJECT_BASE_DIR/.sonar"
 fi
 chown scanner-cli:scanner-cli "$PROJECT_BASE_DIR/.sonar"
-su scanner-cli -c 'SONAR_USER_HOME=.sonar /opt/sonar-scanner/bin/sonar-scanner '${args[@]}
+chown scanner-cli:scanner-cli "$PROJECT_BASE_DIR/.scannerwork"
+su scanner-cli -c 'SONAR_RUNNER_OPTS="-Xmx2048m -XX:MaxPermSize=512m -XX:ReservedCodeCacheSize=128m" SONAR_USER_HOME=.sonar /opt/sonar-scanner/bin/sonar-scanner '"${args[@]} $@"
+
