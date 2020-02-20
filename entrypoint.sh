@@ -10,14 +10,6 @@ add_env_var_as_env_prop() {
   fi
 }
 
-OLDUID=$(id -u scanner-cli)
-OLDGID=$(id -g scanner-cli)
-usermod -u $UID scanner-cli
-groupmod -g $GID scanner-cli
-find / -user $OLDUID -exec chown -h $UID {} \;
-find / -gropu $OLDGID -exec chgrp -h $GID {} \;
-usermod -g $GID scanner-cli
-
 add_env_var_as_env_prop "${SONAR_LOGIN:-}" "sonar.login"
 add_env_var_as_env_prop "${SONAR_PASSWORD:-}" "sonar.password"
 add_env_var_as_env_prop "${SONAR_USER_HOME:-}" "sonar.userHome"
@@ -28,5 +20,9 @@ if [ "${SONAR_PROJECT_BASE_DIR:-}" ]; then
   PROJECT_BASE_DIR="${SONAR_PROJECT_BASE_DIR}"
 fi
 
-export SONAR_USER_HOME="$PROJECT_BASE_DIR/.sonar"
-su - scanner-cli -c "sonar-scanner \"${args[@]}\""
+if ! test -e "$PROJECT_BASE_DIR/.sonar"
+then
+  mkdir "$PROJECT_BASE_DIR/.sonar"
+fi
+chown scanner-cli:scanner-cli "$PROJECT_BASE_DIR/.sonar"
+su scanner-cli -c 'SONAR_USER_HOME=.sonar /opt/sonar-scanner/bin/sonar-scanner '${args[@]}

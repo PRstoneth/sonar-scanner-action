@@ -5,3 +5,4 @@ LABEL homepage="https://github.com/PRstoneth/sonar-scanner-action"
 LABEL maintainer="Thurston Stone <thurston.stone@pestroutes.com>"
 USER root
 COPY entrypoint.sh /usr/bin/entrypoint.sh
+RUN chmod a+x /usr/bin/entrypoint.sh
