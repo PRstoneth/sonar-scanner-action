@@ -16,6 +16,8 @@ runs:
     image: 'Dockerfile'
     env:
       SONAR_HOST_URL: ${{ inputs.sonar-url }}
+      UID: ${{ inputs.sonar-url }}
+      GID: ${{ inputs.sonar-url }}
     args:
     - ${{ inputs.command }}
 
