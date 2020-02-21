@@ -30,5 +30,5 @@ then
 fi
 chown scanner-cli:scanner-cli "$PROJECT_BASE_DIR/.sonar"
 chown scanner-cli:scanner-cli "$PROJECT_BASE_DIR/.scannerwork"
-su scanner-cli -c 'SONAR_RUNNER_OPTS="-Xmx2048m -XX:MaxPermSize=512m -XX:ReservedCodeCacheSize=128m" SONAR_USER_HOME=.sonar /opt/sonar-scanner/bin/sonar-scanner '"${args[@]} $@"
+su scanner-cli -c 'SONAR_SCANNER_OPTS="-Xmx3062m -XX:MaxPermSize=512m -XX:ReservedCodeCacheSize=128m" SONAR_USER_HOME=.sonar /opt/sonar-scanner/bin/sonar-scanner '"${args[@]} $@"
 
